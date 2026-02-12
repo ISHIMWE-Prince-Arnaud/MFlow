@@ -60,7 +60,7 @@ public class StaffDAO {
     }
 
     // Read by username (useful for login)
-    public Staff readByUsername(String username) {
+    public static Staff readByUsername(String username) {
         String sql = "SELECT * FROM staff WHERE username = ?";
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -133,7 +133,7 @@ public class StaffDAO {
     }
 
     // Helper method to map ResultSet to Staff POJO
-    private Staff mapRowToStaff(ResultSet rs) throws SQLException {
+    private static Staff mapRowToStaff(ResultSet rs) throws SQLException {
         Staff staff = new Staff();
         staff.setStaffId(rs.getInt("staff_id"));
         staff.setFullName(rs.getString("full_name"));
