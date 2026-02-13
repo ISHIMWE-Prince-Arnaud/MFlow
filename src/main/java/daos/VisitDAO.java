@@ -55,6 +55,23 @@ public class VisitDAO {
         return null;
     }
 
+    public boolean updateStatus(int visitId, String status) {
+        String sql = "UPDATE visits SET visit_status = ? WHERE visit_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, status);
+            stmt.setInt(2, visitId);
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private static Visit getVisit(ResultSet rs) throws SQLException {
         Visit v = new Visit();
         v.setVisitId(rs.getInt("visit_id"));
