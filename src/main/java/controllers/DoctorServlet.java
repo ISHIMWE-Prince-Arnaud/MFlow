@@ -36,11 +36,11 @@ public class DoctorServlet extends HttpServlet {
         String prescription = request.getParameter("prescription");
 
         HttpSession session = request.getSession(false);
-        Staff staff = (Staff) session.getAttribute("loggedInStaff");
+        Staff doctor = (Staff) session.getAttribute("loggedInStaff");
 
         Diagnosis diagnosis = new Diagnosis();
         diagnosis.setVisitId(visitId);
-        diagnosis.setDoctorId(staff.getStaffId());
+        diagnosis.setDoctorId(doctor.getStaffId());
         diagnosis.setNotes(notes);
         diagnosis.setPrescription(prescription);
 
