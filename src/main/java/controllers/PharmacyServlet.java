@@ -25,8 +25,8 @@ public class PharmacyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
-        request.getRequestDispatcher("/views/pharmacy.jsp");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.getRequestDispatcher("/views/pharmacy.jsp").forward(request, response);
     }
 
     @Override
@@ -46,9 +46,10 @@ public class PharmacyServlet extends HttpServlet {
         if (!medicationSaved) {
             request.setAttribute("error", "Medication Recording Failed");
             request.getRequestDispatcher("/views/pharmacy.jsp");
+            return;
         }
 
-        visitDAO.updateStatus(visitId, "MEDICATION_RECORDED");
-        request.getRequestDispatcher("/archive").forward(request,response);
+        visitDAO.updateStatus(visitId, "COMPLETED");
+        response.sendRedirect(request.getContextPath() + "/archive");
     }
 }
