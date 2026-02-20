@@ -73,7 +73,7 @@ public class AuthenticationFilter implements Filter {
                 return path.endsWith("/pharmacy");
 
             case "ADMIN":
-                return path.endsWith("/archive");
+                return path.contains("/archive");
 
             default:
                 return false;

@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class VisitDetails {
@@ -11,7 +12,7 @@ public class VisitDetails {
     //Patient Info
     private String patientName;
     private String gender;
-    private LocalDateTime dateOfBirth;
+    private LocalDate dateOfBirth;
     private String phone;
 
     //Reception
@@ -75,11 +76,11 @@ public class VisitDetails {
         this.gender = gender;
     }
 
-    public LocalDateTime getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(LocalDateTime dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

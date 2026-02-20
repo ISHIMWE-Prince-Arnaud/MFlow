@@ -2,6 +2,7 @@ package daos;
 
 import models.ArchiveRecord;
 import models.Visit;
+import models.VisitDetails;
 import utils.dbConnection;
 
 import java.sql.*;
@@ -120,5 +121,102 @@ public class VisitDAO {
         }
 
         return records;
+    }
+
+    public VisitDetails getVisitDetails(int visitId) throws SQLException {
+        String sql = "SELECT \n" +
+                "    v.visit_id,\n" +
+                "    v.created_at,\n" +
+                "    v.visit_status,\n" +
+                "\n" +
+                "    p.full_name AS patient_name,\n" +
+                "    p.gender,\n" +
+                "    p.date_of_birth,\n" +
+                "    p.phone,\n" +
+                "\n" +
+                "    r.full_name AS receptionist_name,\n" +
+                "\n" +
+                "    vit.temperature,\n" +
+                "    vit.blood_pressure,\n" +
+                "    vit.weight,\n" +
+                "    n.full_name AS nurse_name,\n" +
+                "\n" +
+                "    d.notes,\n" +
+                "    d.prescription,\n" +
+                "    doc.full_name AS doctor_name,\n" +
+                "\n" +
+                "    ph.medication,\n" +
+                "    ph.dispensed_at,\n" +
+                "    phs.full_name AS pharmacist_name\n" +
+                "FROM visits v\n" +
+                "JOIN patients p ON v.patient_id = p.patient_id\n" +
+                "JOIN staff r ON v.reception_id = r.staff_id\n" +
+                "LEFT JOIN vitals vit ON v.visit_id = vit.visit_id\n" +
+                "LEFT JOIN staff n ON vit.nurse_id = n.staff_id\n" +
+                "LEFT JOIN diagnosis d ON v.visit_id = d.visit_id\n" +
+                "LEFT JOIN staff doc ON d.doctor_id = doc.staff_id\n" +
+                "LEFT JOIN pharmacy ph ON v.visit_id = ph.visit_id\n" +
+                "LEFT JOIN staff phs ON ph.pharmacist_id = phs.staff_id\n" +
+                "WHERE v.visit_id = ?";
+
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, visitId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+                if (resultSet.next()) {
+                    VisitDetails visitDetails = new VisitDetails();
+                    visitDetails.setVisitId(resultSet.getInt("visit_id"));
+                    visitDetails.setVisitStatus(resultSet.getString("visit_status"));
+
+                    // Handle created_at
+                    Timestamp createdAt = resultSet.getTimestamp("created_at");
+                    if (createdAt != null) {
+                        visitDetails.setVisitDate(createdAt.toLocalDateTime());
+                    }
+
+                    visitDetails.setPatientName(resultSet.getString("patient_name"));
+                    visitDetails.setGender(resultSet.getString("gender"));
+
+                    // Handle nullable date_of_birth
+                    Timestamp dob = resultSet.getTimestamp("date_of_birth");
+                    if (dob != null) {
+                        visitDetails.setDateOfBirth(dob.toLocalDateTime().toLocalDate());
+                    }
+
+                    visitDetails.setPhone(resultSet.getString("phone"));
+                    visitDetails.setReceptionistName(resultSet.getString("receptionist_name"));
+
+                    // Nullable numeric fields (Double instead of double)
+                    Double temperature = resultSet.getDouble("temperature");
+                    if (resultSet.wasNull()) temperature = null;
+                    visitDetails.setTemperature(temperature);
+
+                    visitDetails.setBloodPressure(resultSet.getString("blood_pressure"));
+
+                    Double weight = resultSet.getDouble("weight");
+                    if (resultSet.wasNull()) weight = null;
+                    visitDetails.setWeight(weight);
+
+                    visitDetails.setNurseName(resultSet.getString("nurse_name"));
+                    visitDetails.setDoctorName(resultSet.getString("doctor_name"));
+                    visitDetails.setNotes(resultSet.getString("notes"));
+                    visitDetails.setPrescription(resultSet.getString("prescription"));
+                    visitDetails.setMedication(resultSet.getString("medication"));
+                    visitDetails.setPharmacistName(resultSet.getString("pharmacist_name"));
+
+                    // Nullable dispensed_at timestamp
+                    Timestamp dispensedTs = resultSet.getTimestamp("dispensed_at");
+                    if (dispensedTs != null) {
+                        visitDetails.setDispensedAt(dispensedTs.toLocalDateTime());
+                    }
+
+                    return visitDetails;
+                }
+
+                return null;
+            }
+        }
     }
 }
