@@ -26,6 +26,11 @@ public class NurseServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Pass visitId from request attribute to JSP if present
+        Object visitId = request.getAttribute("visitId");
+        if (visitId != null) {
+            request.setAttribute("visitId", visitId);
+        }
         request.getRequestDispatcher("/views/nurse.jsp").forward(request, response);
     }
 
@@ -37,7 +42,7 @@ public class NurseServlet extends HttpServlet {
         double weight = Double.parseDouble(request.getParameter("weight"));
 
         HttpSession session = request.getSession(false);
-        Staff nurse = (Staff) request.getAttribute("loggedInStaff");
+        Staff nurse = (Staff) session.getAttribute("loggedInStaff");
 
         Vitals vitals = new Vitals();
         vitals.setVisitId(visitId);
