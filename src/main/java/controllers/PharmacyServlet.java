@@ -26,6 +26,11 @@ public class PharmacyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Pass visitId from request attribute to JSP if present
+        Object visitIdObj = request.getAttribute("visitId");
+        if (visitIdObj != null) {
+            request.setAttribute("visitId", visitIdObj);
+        }
         request.getRequestDispatcher("/views/pharmacy.jsp").forward(request, response);
     }
 

@@ -11,7 +11,7 @@
 <form action="${pageContext.request.contextPath}/pharmacy" method="post">
 
     <label>Visit ID:</label>
-    <input type="number" name="visitId" required />
+    <input type="number" name="visitId" value="${visitId}" required />
     <br><br>
 
     <label>Medication:</label>

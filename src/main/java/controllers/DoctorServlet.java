@@ -26,6 +26,11 @@ public class DoctorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Pass visitId from request attribute to JSP if present
+        Object visitIdObj = request.getAttribute("visitId");
+        if (visitIdObj != null) {
+            request.setAttribute("visitId", visitIdObj);
+        }
         request.getRequestDispatcher("/views/doctor.jsp").forward(request, response);
     }
 
@@ -54,6 +59,6 @@ public class DoctorServlet extends HttpServlet {
 
         visitDAO.updateStatus(visitId, "DIAGNOSIS_RECORDED");
         request.setAttribute("visitId", visitId);
-        response.sendRedirect("/pharmacy");
+        request.getRequestDispatcher("/pharmacy").forward(request, response);
     }
 }
