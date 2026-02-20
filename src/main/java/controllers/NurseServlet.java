@@ -2,16 +2,15 @@ package controllers;
 
 import daos.VisitDAO;
 import daos.VitalsDAO;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import models.Staff;
+import models.Visit;
 import models.Vitals;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/nurse")
 public class NurseServlet extends HttpServlet {
@@ -26,11 +25,10 @@ public class NurseServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Pass visitId from request attribute to JSP if present
-        Object visitId = request.getAttribute("visitId");
-        if (visitId != null) {
-            request.setAttribute("visitId", visitId);
-        }
+        // Get list of visits that need vitals recorded
+        List<Visit> pendingVisits = visitDAO.getVisitsByStatus("REGISTERED");
+        request.setAttribute("pendingVisits", pendingVisits);
+        
         request.getRequestDispatcher("/views/nurse.jsp").forward(request, response);
     }
 
@@ -54,13 +52,13 @@ public class NurseServlet extends HttpServlet {
         boolean vitalsSaved = vitalsDAO.create(vitals);
         if (!vitalsSaved) {
             request.setAttribute("error", "Vitals not saved");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("REGISTERED");
+            request.setAttribute("pendingVisits", pendingVisits);
             request.getRequestDispatcher("/views/nurse.jsp").forward(request, response);
             return;
         }
 
         visitDAO.updateStatus(visitId, "VITALS_RECORDED");
-
-        request.setAttribute("visitId", visitId);
-        request.getRequestDispatcher("/doctor").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/nurse");
     }
 }

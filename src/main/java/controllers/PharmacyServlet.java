@@ -2,21 +2,20 @@ package controllers;
 
 import daos.PharmacyDAO;
 import daos.VisitDAO;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import models.Pharmacy;
 import models.Staff;
+import models.Visit;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/pharmacy")
 public class PharmacyServlet extends HttpServlet {
-    private PharmacyDAO pharmacyDAO = new PharmacyDAO();
-    private VisitDAO visitDAO = new VisitDAO();
+    private PharmacyDAO pharmacyDAO;
+    private VisitDAO visitDAO;
 
     @Override
     public void init(){
@@ -26,11 +25,10 @@ public class PharmacyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Pass visitId from request attribute to JSP if present
-        Object visitIdObj = request.getAttribute("visitId");
-        if (visitIdObj != null) {
-            request.setAttribute("visitId", visitIdObj);
-        }
+        // Get list of visits that need medication
+        List<Visit> pendingVisits = visitDAO.getVisitsByStatus("DIAGNOSIS_RECORDED");
+        request.setAttribute("pendingVisits", pendingVisits);
+        
         request.getRequestDispatcher("/views/pharmacy.jsp").forward(request, response);
     }
 
@@ -50,11 +48,13 @@ public class PharmacyServlet extends HttpServlet {
         boolean medicationSaved = pharmacyDAO.create(pharmacy);
         if (!medicationSaved) {
             request.setAttribute("error", "Medication Recording Failed");
-            request.getRequestDispatcher("/views/pharmacy.jsp");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("DIAGNOSIS_RECORDED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/pharmacy.jsp").forward(request, response);
             return;
         }
 
         visitDAO.updateStatus(visitId, "COMPLETED");
-        response.sendRedirect(request.getContextPath() + "/archive");
+        response.sendRedirect(request.getContextPath() + "/pharmacy");
     }
 }

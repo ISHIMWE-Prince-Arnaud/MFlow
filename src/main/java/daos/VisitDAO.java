@@ -219,4 +219,31 @@ public class VisitDAO {
             }
         }
     }
+
+    public List<Visit> getVisitsByStatus(String status) {
+        List<Visit> visits = new ArrayList<>();
+        String sql = "SELECT v.visit_id, v.patient_id, v.reception_id, v.visit_status, v.created_at, p.full_name AS patient_name " +
+                     "FROM visits v " +
+                     "JOIN patients p ON v.patient_id = p.patient_id " +
+                     "WHERE v.visit_status = ? " +
+                     "ORDER BY v.created_at ASC";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, status);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Visit visit = getVisit(rs);
+                    visit.setPatientName(rs.getString("patient_name"));
+                    visits.add(visit);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return visits;
+    }
 }

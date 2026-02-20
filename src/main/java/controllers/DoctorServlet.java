@@ -2,21 +2,20 @@ package controllers;
 
 import daos.DiagnosisDAO;
 import daos.VisitDAO;
-import jakarta.servlet.ServletException;
+import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 import models.Diagnosis;
 import models.Staff;
+import models.Visit;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/doctor")
 public class DoctorServlet extends HttpServlet {
-    private DiagnosisDAO diagnosisDAO = new DiagnosisDAO();
-    private VisitDAO visitDAO = new VisitDAO();
+    private DiagnosisDAO diagnosisDAO;
+    private VisitDAO visitDAO;
 
     @Override
     public void init(){
@@ -26,11 +25,10 @@ public class DoctorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Pass visitId from request attribute to JSP if present
-        Object visitIdObj = request.getAttribute("visitId");
-        if (visitIdObj != null) {
-            request.setAttribute("visitId", visitIdObj);
-        }
+        // Get list of visits that need diagnosis
+        List<Visit> pendingVisits = visitDAO.getVisitsByStatus("VITALS_RECORDED");
+        request.setAttribute("pendingVisits", pendingVisits);
+        
         request.getRequestDispatcher("/views/doctor.jsp").forward(request, response);
     }
 
@@ -53,12 +51,13 @@ public class DoctorServlet extends HttpServlet {
 
         if (!diagnosisRecorded){
             request.setAttribute("error", "Diagnosis Record Failed");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("VITALS_RECORDED");
+            request.setAttribute("pendingVisits", pendingVisits);
             request.getRequestDispatcher("/views/doctor.jsp").forward(request, response);
             return;
         }
 
         visitDAO.updateStatus(visitId, "DIAGNOSIS_RECORDED");
-        request.setAttribute("visitId", visitId);
-        request.getRequestDispatcher("/pharmacy").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/doctor");
     }
 }

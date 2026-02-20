@@ -9,6 +9,7 @@ public class Visit {
     private int receptionId;
     private String visitStatus;
     private LocalDateTime createdAt;
+    private String patientName; // For display purposes
 
     public Visit() {};
 
@@ -63,5 +64,13 @@ public class Visit {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
     }
 }
