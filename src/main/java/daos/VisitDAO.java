@@ -1,9 +1,12 @@
 package daos;
 
+import models.ArchiveRecord;
 import models.Visit;
 import utils.dbConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisitDAO {
 
@@ -80,5 +83,42 @@ public class VisitDAO {
         v.setVisitStatus(rs.getString("visit_status"));
         v.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         return v;
+    }
+
+    public List<ArchiveRecord> getArchivedRecords() {
+        List<ArchiveRecord> records = new ArrayList<>();
+
+        String sql = "SELECT v.visit_id,\n" +
+                "       p.full_name AS patient_name,\n" +
+                "       s.full_name AS doctor_name,\n" +
+                "       ph.medication,\n" +
+                "       v.created_at\n" +
+                "FROM visits v\n" +
+                "JOIN patients p ON v.patient_id = p.patient_id\n" +
+                "LEFT JOIN diagnosis d ON v.visit_id = d.visit_id\n" +
+                "LEFT JOIN staff s ON d.doctor_id = s.staff_id\n" +
+                "LEFT JOIN pharmacy ph ON v.visit_id = ph.visit_id\n" +
+                "WHERE v.visit_status = 'COMPLETED'\n" +
+                "ORDER BY v.created_at DESC;";
+
+        try(Connection connection = dbConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                ArchiveRecord record = new ArchiveRecord();
+                record.setVisitId(resultSet.getInt("visit_id"));
+                record.setPatientName(resultSet.getString("patient_name"));
+                record.setDoctorName(resultSet.getString("doctor_name"));
+                record.setMedication(resultSet.getString("medication"));
+                record.setVisitDate(resultSet.getTimestamp("created_at").toLocalDateTime());
+
+                records.add(record);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return records;
     }
 }
