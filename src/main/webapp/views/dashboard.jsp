@@ -1,18 +1,58 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: HP
-  Date: 13/02/2026
-  Time: 07:35
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <html>
 <head>
-    <title>Title</title>
+    <title>Dashboard - MFlow</title>
 </head>
 <body>
- <h1>
-     Welcome to Dashboard.
- </h1>
+
+<h2>Welcome, ${sessionScope.loggedInStaff.fullName}</h2>
+<p>Role: ${sessionScope.loggedInStaff.role}</p>
+
+<hr>
+
+<c:choose>
+    <c:when test="${sessionScope.loggedInStaff.role == 'RECEPTIONIST'}">
+        <h3>Reception Panel</h3>
+        <a href="${pageContext.request.contextPath}/register">
+            Register New Patient Visit
+        </a>
+    </c:when>
+
+    <c:when test="${sessionScope.loggedInStaff.role == 'NURSE'}">
+        <h3>Nurse Panel</h3>
+        <a href="${pageContext.request.contextPath}/nurse">
+            Record Patient Vitals
+        </a>
+    </c:when>
+
+    <c:when test="${sessionScope.loggedInStaff.role == 'DOCTOR'}">
+        <h3>Doctor Panel</h3>
+        <a href="${pageContext.request.contextPath}/doctor">
+            Diagnose Patient
+        </a>
+    </c:when>
+
+    <c:when test="${sessionScope.loggedInStaff.role == 'PHARMACIST'}">
+        <h3>Pharmacy Panel</h3>
+        <a href="${pageContext.request.contextPath}/pharmacy">
+            Dispense Medication
+        </a>
+    </c:when>
+
+    <c:when test="${sessionScope.loggedInStaff.role == 'ADMIN'}">
+        <h3>Admin Panel</h3>
+        <a href="${pageContext.request.contextPath}/archive">
+            View Archived Visits
+        </a>
+    </c:when>
+
+</c:choose>
+
+<hr>
+
+<a href="${pageContext.request.contextPath}/logout">Logout</a>
+
 </body>
 </html>

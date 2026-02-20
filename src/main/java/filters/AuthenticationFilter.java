@@ -61,7 +61,7 @@ public class AuthenticationFilter implements Filter {
         }
 
         switch (role) {
-            case "RECEPTION":
+            case "RECEPTIONIST":
                 return path.endsWith("/register");
 
             case "NURSE":
