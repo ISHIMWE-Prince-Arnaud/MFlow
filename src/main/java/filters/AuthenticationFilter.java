@@ -22,8 +22,9 @@ public class AuthenticationFilter implements Filter {
         String path = req.getRequestURI();
         String context = req.getContextPath();
 
-        // Allow login and static resources
+        // Allow login, logout and static resources
         if (path.endsWith("/login") ||
+                path.endsWith("/logout") ||
                 path.contains("/views/login.jsp") ||
                 path.contains("/css/") ||
                 path.contains("/images/")) {
