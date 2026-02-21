@@ -8,7 +8,6 @@ import models.Staff;
 import models.Visit;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +87,9 @@ public class DashboardServlet extends HttpServlet {
             request.setAttribute("patientsNeedingDiagnosis", patientsNeedingDiagnosis);
         }
         
-        // If pharmacist, load patients who need medication (DIAGNOSED status)
+        // If pharmacist, load patients who need medication (DIAGNOSIS_RECORDED status)
         if (loggedInStaff != null && "PHARMACIST".equals(loggedInStaff.getRole())) {
-            List<Visit> visits = visitDAO.getVisitsByStatus("DIAGNOSED");
+            List<Visit> visits = visitDAO.getVisitsByStatus("DIAGNOSIS_RECORDED");
             
             List<VisitDisplay> patientsNeedingMedication = new ArrayList<>();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm");
