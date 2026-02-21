@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,9 +54,16 @@
     <!-- Main -->
     <main class="p-8 max-w-6xl mx-auto">
 
-        <div class="mb-6">
-            <h1 class="text-2xl font-semibold text-slate-800">Archived Visits</h1>
-            <p class="text-sm text-slate-500 mt-1">Completed patient visit records.</p>
+        <div class="mb-6 flex items-start justify-between">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-800">Archived Visits</h1>
+                <p class="text-sm text-slate-500 mt-1">Completed patient visit records.</p>
+            </div>
+            <c:if test="${not empty records}">
+                <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                    ${fn:length(records)} records
+                </span>
+            </c:if>
         </div>
 
         <!-- Table Card -->

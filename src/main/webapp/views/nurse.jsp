@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,9 +55,17 @@
     <!-- Main -->
     <main class="p-8 max-w-5xl mx-auto">
 
-        <div class="mb-6">
-            <h1 class="text-2xl font-semibold text-slate-800">Record Patient Vitals</h1>
-            <p class="text-sm text-slate-500 mt-1">Patients currently waiting for vitals assessment.</p>
+        <div class="mb-6 flex items-start justify-between">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-800">Record Patient Vitals</h1>
+                <p class="text-sm text-slate-500 mt-1">Patients currently waiting for vitals assessment.</p>
+            </div>
+            <c:if test="${not empty pendingVisits}">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-700 border border-amber-200">
+                    <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse inline-block"></span>
+                    ${fn:length(pendingVisits)} waiting
+                </span>
+            </c:if>
         </div>
 
         <!-- Error Alert -->
