@@ -229,11 +229,6 @@
             </c:choose>
 
         </div>
-
-        <!-- Footer note -->
-        <p class="text-xs text-slate-400 mt-10 text-center">
-            MFlow Clinical Workflow Management &mdash; All actions are logged for audit purposes.
-        </p>
     </main>
 
 </body>
