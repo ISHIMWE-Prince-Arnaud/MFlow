@@ -14,7 +14,6 @@ import models.Visit;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Stack;
 
 @WebServlet("/register")
 public class RegisterPatientServlet extends HttpServlet {
@@ -74,9 +73,7 @@ public class RegisterPatientServlet extends HttpServlet {
             return;
         }
 
-        //Pass Visit ID to Nurse Module
-        request.setAttribute("visitId", visit.getVisitId());
-
-        request.getRequestDispatcher("/nurse").forward(request, response);
+        //Patient registered and visit created — redirect back to register with success
+        response.sendRedirect(request.getContextPath() + "/register?success=true");
     }
 }

@@ -1,3 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +9,10 @@
 <body>
 
 <h2>Register Patient</h2>
+
+<c:if test="${param.success == 'true'}">
+    <p style="color:green;">Patient registered successfully! The visit is now in the nurse's queue.</p>
+</c:if>
 
 <form method="post" action="${pageContext.request.contextPath}/register">
 
