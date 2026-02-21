@@ -31,7 +31,7 @@
                 <tr>
                     <td>${visit.visitId}</td>
                     <td>${visit.patientName}</td>
-                    <td><fmt:formatDate value="${visit.createdAt}" pattern="yyyy-MM-dd HH:mm" /></td>
+                    <td>${visit.createdAt}</td>
                     <td>
                         <form action="${pageContext.request.contextPath}/nurse" method="post" style="margin:0;">
                             <input type="hidden" name="visitId" value="${visit.visitId}" />
