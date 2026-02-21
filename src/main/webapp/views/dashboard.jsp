@@ -151,11 +151,10 @@
         </c:if>
 
         <!-- Action Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <c:choose>
 
-            <c:choose>
-
-                <c:when test="${role == 'RECEPTIONIST'}">
+            <c:when test="${role == 'RECEPTIONIST'}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <a href="${pageContext.request.contextPath}/register"
                        class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6
                               hover:shadow-md hover:border-blue-200 transition duration-200 flex flex-col gap-4">
@@ -180,9 +179,11 @@
                             </p>
                         </div>
                     </a>
-                </c:when>
+                </div>
+            </c:when>
 
-                <c:when test="${role == 'NURSE'}">
+            <c:when test="${role == 'NURSE'}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <a href="${pageContext.request.contextPath}/nurse"
                        class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6
                               hover:shadow-md hover:border-amber-200 transition duration-200 flex flex-col gap-4">
@@ -207,9 +208,11 @@
                             </p>
                         </div>
                     </a>
-                </c:when>
+                </div>
+            </c:when>
 
-                <c:when test="${role == 'DOCTOR'}">
+            <c:when test="${role == 'DOCTOR'}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <a href="${pageContext.request.contextPath}/doctor"
                        class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6
                               hover:shadow-md hover:border-indigo-200 transition duration-200 flex flex-col gap-4">
@@ -234,9 +237,11 @@
                             </p>
                         </div>
                     </a>
-                </c:when>
+                </div>
+            </c:when>
 
-                <c:when test="${role == 'PHARMACIST'}">
+            <c:when test="${role == 'PHARMACIST'}">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                     <a href="${pageContext.request.contextPath}/pharmacy"
                        class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6
                               hover:shadow-md hover:border-green-200 transition duration-200 flex flex-col gap-4">
@@ -261,9 +266,38 @@
                             </p>
                         </div>
                     </a>
-                </c:when>
+                </div>
+            </c:when>
 
-                <c:when test="${role == 'ADMIN'}">
+            <c:when test="${role == 'ADMIN'}">
+                    <!-- Action Card for Admin (at top) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                        <a href="${pageContext.request.contextPath}/archive"
+                           class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6
+                                  hover:shadow-md hover:border-slate-300 transition duration-200 flex flex-col gap-4">
+                            <div class="flex items-start justify-between">
+                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
+                                    </svg>
+                                </div>
+                                <svg class="w-4 h-4 text-slate-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-base font-medium text-slate-800 group-hover:text-primary transition-colors">
+                                    View Archived Visits
+                                </h3>
+                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                                    Browse completed patient visit records and audit history.
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+
                     <!-- Overview Statistics Cards for Admin -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                         <!-- Today's Visits -->
@@ -370,38 +404,9 @@
                         </div>
                     </div>
 
-                    <!-- Action Card for Admin -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <a href="${pageContext.request.contextPath}/archive"
-                           class="group bg-white rounded-xl shadow-sm border border-slate-200 p-6
-                                  hover:shadow-md hover:border-slate-300 transition duration-200 flex flex-col gap-4">
-                            <div class="flex items-start justify-between">
-                                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                              d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/>
-                                    </svg>
-                                </div>
-                                <svg class="w-4 h-4 text-slate-300 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200"
-                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-base font-medium text-slate-800 group-hover:text-primary transition-colors">
-                                    View Archived Visits
-                                </h3>
-                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">
-                                    Browse completed patient visit records and audit history.
-                                </p>
-                            </div>
-                        </a>
-                    </div>
                 </c:when>
 
             </c:choose>
-
-        </div>
 
         <!-- Patients Needing Vitals Section (For Nurses) -->
         <c:if test="${role == 'NURSE' && not empty patientsNeedingVitals}">
