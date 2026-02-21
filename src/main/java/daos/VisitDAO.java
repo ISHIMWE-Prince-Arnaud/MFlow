@@ -246,4 +246,32 @@ public class VisitDAO {
 
         return visits;
     }
+
+    public List<Visit> getVisitsByReceptionistAndStatus(int receptionistId, String status) {
+        List<Visit> visits = new ArrayList<>();
+        String sql = "SELECT v.visit_id, v.patient_id, v.reception_id, v.visit_status, v.created_at, p.full_name AS patient_name " +
+                     "FROM visits v " +
+                     "JOIN patients p ON v.patient_id = p.patient_id " +
+                     "WHERE v.reception_id = ? AND v.visit_status = ? " +
+                     "ORDER BY v.created_at DESC";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, receptionistId);
+            stmt.setString(2, status);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Visit visit = getVisit(rs);
+                    visit.setPatientName(rs.getString("patient_name"));
+                    visits.add(visit);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return visits;
+    }
 }

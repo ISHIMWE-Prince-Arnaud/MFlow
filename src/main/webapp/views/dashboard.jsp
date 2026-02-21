@@ -86,8 +86,20 @@
             </p>
         </div>
 
+        <!-- Success Alert for Patient Registration -->
+        <c:if test="${param.registered == 'true'}">
+            <div class="mb-6 flex items-start gap-3 rounded-lg bg-green-50 border border-green-200 px-4 py-3">
+                <svg class="w-4 h-4 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <p class="text-sm text-green-700">Patient registered successfully! The visit is now in the nurse's queue.</p>
+            </div>
+        </c:if>
+
         <!-- Action Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
 
             <c:choose>
 
@@ -229,6 +241,41 @@
             </c:choose>
 
         </div>
+
+        <!-- My Registered Patients Section (For Receptionists) -->
+        <c:if test="${role == 'RECEPTIONIST' && not empty registeredPatients}">
+            <div class="mt-8">
+                <h2 class="text-lg font-semibold text-slate-800 mb-4">My Registered Patients</h2>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Patient Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Visit ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Registered At</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <c:forEach var="visit" items="${registeredPatients}">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 text-sm text-slate-800">${visit.patientName}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600">#${visit.visitId}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+                                            ${visit.visitStatus}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">
+                                        ${visit.createdAtFormatted}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </c:if>
     </main>
 
 </body>

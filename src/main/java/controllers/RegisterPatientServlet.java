@@ -73,7 +73,7 @@ public class RegisterPatientServlet extends HttpServlet {
             return;
         }
 
-        //Patient registered and visit created — redirect back to register with success
-        response.sendRedirect(request.getContextPath() + "/register?success=true");
+        //Patient registered and visit created — redirect to dashboard with success message
+        response.sendRedirect(request.getContextPath() + "/dashboard?registered=true");
     }
 }
