@@ -34,11 +34,36 @@ public class DoctorServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int visitId = Integer.parseInt(request.getParameter("visitId"));
+        // Input validation
+        String visitIdParam = request.getParameter("visitId");
         String notes = request.getParameter("notes");
         String prescription = request.getParameter("prescription");
 
+        int visitId;
+        try {
+            visitId = Integer.parseInt(visitIdParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid visit ID.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("VITALS_RECORDED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/doctor.jsp").forward(request, response);
+            return;
+        }
+
+        if (notes == null || notes.trim().isEmpty()) {
+            request.setAttribute("error", "Diagnosis notes are required.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("VITALS_RECORDED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/doctor.jsp").forward(request, response);
+            return;
+        }
+
+        // Null-safe session check
         HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedInStaff") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         Staff doctor = (Staff) session.getAttribute("loggedInStaff");
 
         Diagnosis diagnosis = new Diagnosis();

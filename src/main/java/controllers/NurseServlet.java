@@ -34,12 +34,51 @@ public class NurseServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int visitId = Integer.parseInt(request.getParameter("visitId"));
-        double temperature = Double.parseDouble(request.getParameter("temperature"));
+        // Input validation
+        String visitIdParam = request.getParameter("visitId");
+        String temperatureParam = request.getParameter("temperature");
         String bloodPressure = request.getParameter("bloodPressure");
-        double weight = Double.parseDouble(request.getParameter("weight"));
+        String weightParam = request.getParameter("weight");
 
+        int visitId;
+        double temperature;
+        double weight;
+
+        try {
+            visitId = Integer.parseInt(visitIdParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid visit ID.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("REGISTERED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/nurse.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            temperature = Double.parseDouble(temperatureParam);
+            weight = Double.parseDouble(weightParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Temperature and weight must be valid numbers.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("REGISTERED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/nurse.jsp").forward(request, response);
+            return;
+        }
+
+        if (bloodPressure == null || bloodPressure.trim().isEmpty()) {
+            request.setAttribute("error", "Blood pressure is required.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("REGISTERED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/nurse.jsp").forward(request, response);
+            return;
+        }
+
+        // Null-safe session check
         HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedInStaff") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         Staff nurse = (Staff) session.getAttribute("loggedInStaff");
 
         Vitals vitals = new Vitals();

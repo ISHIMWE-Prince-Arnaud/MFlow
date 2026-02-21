@@ -22,11 +22,25 @@ public class VisitDetailsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int visitId = Integer.parseInt(request.getParameter("visitId"));
+        // Validate visitId parameter
+        String visitIdParam = request.getParameter("visitId");
+        if (visitIdParam == null || visitIdParam.trim().isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing visitId parameter.");
+            return;
+        }
+
+        int visitId;
+        try {
+            visitId = Integer.parseInt(visitIdParam);
+        } catch (NumberFormatException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid visitId parameter.");
+            return;
+        }
+
         try {
             VisitDetails visitDetails = visitDAO.getVisitDetails(visitId);
             if (visitDetails == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "Visit not found.");
                 return;
             }
 
@@ -34,6 +48,7 @@ public class VisitDetailsServlet extends HttpServlet {
             request.getRequestDispatcher("/views/viewDetails.jsp").forward(request, response);
         } catch (SQLException e) {
             e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "A database error occurred. Please try again later.");
         }
     }
 }

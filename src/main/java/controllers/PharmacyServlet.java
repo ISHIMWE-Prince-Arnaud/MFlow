@@ -34,10 +34,35 @@ public class PharmacyServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int visitId = Integer.parseInt(request.getParameter("visitId"));
+        // Input validation
+        String visitIdParam = request.getParameter("visitId");
         String medication = request.getParameter("medication");
 
+        int visitId;
+        try {
+            visitId = Integer.parseInt(visitIdParam);
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid visit ID.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("DIAGNOSIS_RECORDED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/pharmacy.jsp").forward(request, response);
+            return;
+        }
+
+        if (medication == null || medication.trim().isEmpty()) {
+            request.setAttribute("error", "Medication details are required.");
+            List<Visit> pendingVisits = visitDAO.getVisitsByStatus("DIAGNOSIS_RECORDED");
+            request.setAttribute("pendingVisits", pendingVisits);
+            request.getRequestDispatcher("/views/pharmacy.jsp").forward(request, response);
+            return;
+        }
+
+        // Null-safe session check
         HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedInStaff") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
         Staff pharmacist = (Staff) session.getAttribute("loggedInStaff");
 
         Pharmacy pharmacy = new Pharmacy();
