@@ -132,6 +132,21 @@ public class StaffDAO {
         return staffList;
     }
 
+    // Get total staff count
+    public int getTotalStaffCount() {
+        String sql = "SELECT COUNT(*) FROM staff";
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     // Helper method to map ResultSet to Staff POJO
     private static Staff mapRowToStaff(ResultSet rs) throws SQLException {
         Staff staff = new Staff();

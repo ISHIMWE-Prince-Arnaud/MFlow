@@ -1,5 +1,6 @@
 package controllers;
 
+import daos.StaffDAO;
 import daos.VisitDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,10 +17,12 @@ import java.util.List;
 public class DashboardServlet extends HttpServlet {
 
     private VisitDAO visitDAO;
+    private StaffDAO staffDAO;
 
     @Override
     public void init() {
         visitDAO = new VisitDAO();
+        staffDAO = new StaffDAO();
     }
 
     @Override
@@ -103,6 +106,19 @@ public class DashboardServlet extends HttpServlet {
                 patientsNeedingMedication.add(display);
             }
             request.setAttribute("patientsNeedingMedication", patientsNeedingMedication);
+        }
+
+        // If admin, load statistics for dashboard overview
+        if (loggedInStaff != null && "ADMIN".equals(loggedInStaff.getRole())) {
+            request.setAttribute("totalVisits", visitDAO.getTotalVisitsCount());
+            request.setAttribute("completedVisits", visitDAO.getCompletedVisitsCount());
+            request.setAttribute("pendingVisits", visitDAO.getPendingVisitsCount());
+            request.setAttribute("todayVisits", visitDAO.getTodayVisitsCount());
+            request.setAttribute("totalPatients", visitDAO.getTotalPatientsCount());
+            request.setAttribute("totalStaff", staffDAO.getTotalStaffCount());
+            request.setAttribute("visitsRegistered", visitDAO.getVisitsBySpecificStatus("REGISTERED"));
+            request.setAttribute("visitsVitalsRecorded", visitDAO.getVisitsBySpecificStatus("VITALS_RECORDED"));
+            request.setAttribute("visitsDiagnosisRecorded", visitDAO.getVisitsBySpecificStatus("DIAGNOSIS_RECORDED"));
         }
 
         request.getRequestDispatcher("/views/dashboard.jsp")
