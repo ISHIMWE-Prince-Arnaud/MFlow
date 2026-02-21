@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MFlow — Login</title>
+    <title>MFlow - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -141,7 +141,7 @@
                            flex items-center justify-center gap-2"
                     onclick="
                         this.disabled = true;
-                        document.getElementById('btnText').textContent = 'Signing in…';
+                        document.getElementById('btnText').textContent = 'Signing in';
                         document.getElementById('btnSpinner').classList.remove('hidden');
                         document.getElementById('loginForm').submit();
                     "
