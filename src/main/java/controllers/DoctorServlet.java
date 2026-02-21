@@ -83,6 +83,6 @@ public class DoctorServlet extends HttpServlet {
         }
 
         visitDAO.updateStatus(visitId, "DIAGNOSIS_RECORDED");
-        response.sendRedirect(request.getContextPath() + "/doctor");
+        response.sendRedirect(request.getContextPath() + "/doctor?diagnosed=true");
     }
 }

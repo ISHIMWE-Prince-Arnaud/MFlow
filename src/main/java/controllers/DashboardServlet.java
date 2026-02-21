@@ -51,6 +51,60 @@ public class DashboardServlet extends HttpServlet {
             }
             request.setAttribute("registeredPatients", registeredPatients);
         }
+        
+        // If nurse, load patients who need vitals recorded (REGISTERED status)
+        if (loggedInStaff != null && "NURSE".equals(loggedInStaff.getRole())) {
+            List<Visit> visits = visitDAO.getVisitsByStatus("REGISTERED");
+            
+            List<VisitDisplay> patientsNeedingVitals = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm");
+            for (Visit visit : visits) {
+                VisitDisplay display = new VisitDisplay();
+                display.setVisitId(visit.getVisitId());
+                display.setPatientName(visit.getPatientName());
+                display.setVisitStatus(visit.getVisitStatus());
+                display.setCreatedAtFormatted(
+                    visit.getCreatedAt() != null ? visit.getCreatedAt().format(formatter) : "-");
+                patientsNeedingVitals.add(display);
+            }
+            request.setAttribute("patientsNeedingVitals", patientsNeedingVitals);
+        }
+        
+        // If doctor, load patients who need diagnosis (VITALS_RECORDED status)
+        if (loggedInStaff != null && "DOCTOR".equals(loggedInStaff.getRole())) {
+            List<Visit> visits = visitDAO.getVisitsByStatus("VITALS_RECORDED");
+            
+            List<VisitDisplay> patientsNeedingDiagnosis = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm");
+            for (Visit visit : visits) {
+                VisitDisplay display = new VisitDisplay();
+                display.setVisitId(visit.getVisitId());
+                display.setPatientName(visit.getPatientName());
+                display.setVisitStatus(visit.getVisitStatus());
+                display.setCreatedAtFormatted(
+                    visit.getCreatedAt() != null ? visit.getCreatedAt().format(formatter) : "-");
+                patientsNeedingDiagnosis.add(display);
+            }
+            request.setAttribute("patientsNeedingDiagnosis", patientsNeedingDiagnosis);
+        }
+        
+        // If pharmacist, load patients who need medication (DIAGNOSED status)
+        if (loggedInStaff != null && "PHARMACIST".equals(loggedInStaff.getRole())) {
+            List<Visit> visits = visitDAO.getVisitsByStatus("DIAGNOSED");
+            
+            List<VisitDisplay> patientsNeedingMedication = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy HH:mm");
+            for (Visit visit : visits) {
+                VisitDisplay display = new VisitDisplay();
+                display.setVisitId(visit.getVisitId());
+                display.setPatientName(visit.getPatientName());
+                display.setVisitStatus(visit.getVisitStatus());
+                display.setCreatedAtFormatted(
+                    visit.getCreatedAt() != null ? visit.getCreatedAt().format(formatter) : "-");
+                patientsNeedingMedication.add(display);
+            }
+            request.setAttribute("patientsNeedingMedication", patientsNeedingMedication);
+        }
 
         request.getRequestDispatcher("/views/dashboard.jsp")
                 .forward(request, response);

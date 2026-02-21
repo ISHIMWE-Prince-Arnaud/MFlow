@@ -242,6 +242,111 @@
 
         </div>
 
+        <!-- Patients Needing Vitals Section (For Nurses) -->
+        <c:if test="${role == 'NURSE' && not empty patientsNeedingVitals}">
+            <div class="mt-8">
+                <h2 class="text-lg font-semibold text-slate-800 mb-4">Patients Needing Vitals</h2>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Patient Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Visit ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Registered At</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <c:forEach var="visit" items="${patientsNeedingVitals}">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 text-sm text-slate-800">${visit.patientName}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600">#${visit.visitId}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
+                                            ${visit.visitStatus}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">
+                                        ${visit.createdAtFormatted}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </c:if>
+
+        <!-- Patients Needing Diagnosis Section (For Doctors) -->
+        <c:if test="${role == 'DOCTOR' && not empty patientsNeedingDiagnosis}">
+            <div class="mt-8">
+                <h2 class="text-lg font-semibold text-slate-800 mb-4">Patients Needing Diagnosis</h2>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Patient Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Visit ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Registered At</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <c:forEach var="visit" items="${patientsNeedingDiagnosis}">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 text-sm text-slate-800">${visit.patientName}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600">#${visit.visitId}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-700 border border-indigo-200">
+                                            ${visit.visitStatus}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">
+                                        ${visit.createdAtFormatted}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </c:if>
+
+        <!-- Patients Needing Medication Section (For Pharmacists) -->
+        <c:if test="${role == 'PHARMACIST' && not empty patientsNeedingMedication}">
+            <div class="mt-8">
+                <h2 class="text-lg font-semibold text-slate-800 mb-4">Patients Needing Medication</h2>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Patient Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Visit ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Registered At</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <c:forEach var="visit" items="${patientsNeedingMedication}">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="px-4 py-3 text-sm text-slate-800">${visit.patientName}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600">#${visit.visitId}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
+                                            ${visit.visitStatus}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-sm text-slate-500">
+                                        ${visit.createdAtFormatted}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </c:if>
+
         <!-- My Registered Patients Section (For Receptionists) -->
         <c:if test="${role == 'RECEPTIONIST' && not empty registeredPatients}">
             <div class="mt-8">

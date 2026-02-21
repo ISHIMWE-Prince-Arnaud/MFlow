@@ -80,6 +80,6 @@ public class PharmacyServlet extends HttpServlet {
         }
 
         visitDAO.updateStatus(visitId, "COMPLETED");
-        response.sendRedirect(request.getContextPath() + "/pharmacy");
+        response.sendRedirect(request.getContextPath() + "/pharmacy?dispensed=true");
     }
 }

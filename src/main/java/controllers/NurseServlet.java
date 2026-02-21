@@ -98,6 +98,6 @@ public class NurseServlet extends HttpServlet {
         }
 
         visitDAO.updateStatus(visitId, "VITALS_RECORDED");
-        response.sendRedirect(request.getContextPath() + "/nurse");
+        response.sendRedirect(request.getContextPath() + "/nurse?vitalsRecorded=true");
     }
 }
