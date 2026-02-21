@@ -290,7 +290,7 @@ DB_PASSWORD=your database password
 
 ### Database Connection
 
-The database connection is managed by [`src/main/java/utils/dbConnection.java`](src/main/java/utils/dbConnection.java:1), which:
+The database connection is managed by [`src/main/java/utils/dbConnection.java`](src/main/java/utils/dbConnection.java), which:
 
 1. Loads environment variables from the `.env` file using dotenv-java
 2. Uses PostgreSQL JDBC driver (version 42.7.7)
@@ -451,15 +451,15 @@ The login page will be displayed at `/views/login.jsp`.
 
 | Endpoint | Servlet Class | Method | Description |
 |----------|---------------|--------|-------------|
-| `/login` | [`LoginServlet.java`](src/main/java/controllers/LoginServlet.java:1) | GET/POST | User authentication |
-| `/logout` | [`LogoutServlet.java`](src/main/java/controllers/LogoutServlet.java:1) | GET | User logout |
-| `/dashboard` | [`DashboardServlet.java`](src/main/java/controllers/DashboardServlet.java:1) | GET | Main dashboard |
-| `/register` | [`RegisterPatientServlet.java`](src/main/java/controllers/RegisterPatientServlet.java:1) | GET/POST | Patient registration |
-| `/nurse` | [`NurseServlet.java`](src/main/java/controllers/NurseServlet.java:1) | GET/POST | Vitals recording |
-| `/doctor` | [`DoctorServlet.java`](src/main/java/controllers/DoctorServlet.java:1) | GET/POST | Diagnosis entry |
-| `/pharmacy` | [`PharmacyServlet.java`](src/main/java/controllers/PharmacyServlet.java:1) | GET/POST | Medication dispensing |
-| `/archive` | [`ArchiveServlet.java`](src/main/java/controllers/ArchiveServlet.java:1) | GET | View completed visits |
-| `/archive/details` | [`VisitDetailsServlet.java`](src/main/java/controllers/VisitDetailsServlet.java:1) | GET | Visit details |
+| `/login` | [`LoginServlet.java`](src/main/java/controllers/LoginServlet.java) | GET/POST | User authentication |
+| `/logout` | [`LogoutServlet.java`](src/main/java/controllers/LogoutServlet.java) | GET | User logout |
+| `/dashboard` | [`DashboardServlet.java`](src/main/java/controllers/DashboardServlet.java) | GET | Main dashboard |
+| `/register` | [`RegisterPatientServlet.java`](src/main/java/controllers/RegisterPatientServlet.java) | GET/POST | Patient registration |
+| `/nurse` | [`NurseServlet.java`](src/main/java/controllers/NurseServlet.java) | GET/POST | Vitals recording |
+| `/doctor` | [`DoctorServlet.java`](src/main/java/controllers/DoctorServlet.java) | GET/POST | Diagnosis entry |
+| `/pharmacy` | [`PharmacyServlet.java`](src/main/java/controllers/PharmacyServlet.java) | GET/POST | Medication dispensing |
+| `/archive` | [`ArchiveServlet.java`](src/main/java/controllers/ArchiveServlet.java) | GET | View completed visits |
+| `/archive/details` | [`VisitDetailsServlet.java`](src/main/java/controllers/VisitDetailsServlet.java) | GET | Visit details |
 
 ---
 
@@ -469,14 +469,14 @@ The login page will be displayed at `/views/login.jsp`.
 
 | Class | File | Description |
 |-------|------|-------------|
-| **Patient** | [`Patient.java`](src/main/java/models/Patient.java:1) | Patient demographic information |
-| **Staff** | [`Staff.java`](src/main/java/models/Staff.java:1) | User/employee information |
-| **Visit** | [`Visit.java`](src/main/java/models/Visit.java:1) | Visit record linking patient and status |
-| **VisitDetails** | [`VisitDetails.java`](src/main/java/models/VisitDetails.java:1) | Complete visit information (aggregated) |
-| **Vitals** | [`Vitals.java`](src/main/java/models/Vitals.java:1) | Patient vital signs |
-| **Diagnosis** | [`Diagnosis.java`](src/main/java/models/Diagnosis.java:1) | Doctor's medical notes and prescription |
-| **Pharmacy** | [`Pharmacy.java`](src/main/java/models/Pharmacy.java:1) | Dispensed medication record |
-| **ArchiveRecord** | [`ArchiveRecord.java`](src/main/java/models/ArchiveRecord.java:1) | Historical visit summary |
+| **Patient** | [`Patient.java`](src/main/java/models/Patient.java) | Patient demographic information |
+| **Staff** | [`Staff.java`](src/main/java/models/Staff.java) | User/employee information |
+| **Visit** | [`Visit.java`](src/main/java/models/Visit.java) | Visit record linking patient and status |
+| **VisitDetails** | [`VisitDetails.java`](src/main/java/models/VisitDetails.java) | Complete visit information (aggregated) |
+| **Vitals** | [`Vitals.java`](src/main/java/models/Vitals.java) | Patient vital signs |
+| **Diagnosis** | [`Diagnosis.java`](src/main/java/models/Diagnosis.java) | Doctor's medical notes and prescription |
+| **Pharmacy** | [`Pharmacy.java`](src/main/java/models/Pharmacy.java) | Dispensed medication record |
+| **ArchiveRecord** | [`ArchiveRecord.java`](src/main/java/models/ArchiveRecord.java) | Historical visit summary |
 
 ### Model Relationships
 
@@ -553,7 +553,7 @@ The patient journey through MFlow follows this sequential workflow:
 
 ### Authorization
 
-Role-based access control implemented via [`AuthenticationFilter.java`](src/main/java/filters/AuthenticationFilter.java:1):
+Role-based access control implemented via [`AuthenticationFilter.java`](src/main/java/filters/AuthenticationFilter.java):
 
 | Role | Accessible Endpoints |
 |------|---------------------|
